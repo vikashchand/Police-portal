@@ -22,12 +22,22 @@ const mailRoutes = require('./Routes/mailRoutes');
 
 // Use your routes
 
+// const corsOptions = {
+//    origin: 'http://localhost:3000',
+//    credentials: true,
+//    optionSuccessStatus: 200,
+//  };
+//  app.use(cors(corsOptions));
+
+
+
 const corsOptions = {
-   origin: 'http://localhost:3000',
-   credentials: true,
-   optionSuccessStatus: 200,
- };
- app.use(cors(corsOptions));
+  origin: 'https://tnpolice.vercel.app',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 
 
 

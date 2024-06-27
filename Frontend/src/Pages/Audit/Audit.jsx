@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Audit.css';
-
+import baseUrl from '../../config';
 const Audit = () => {
   const [adminPowersLogs, setAdminPowersLogs] = useState([]);
   const [customersLogs, setCustomersLogs] = useState([]);
@@ -10,7 +10,7 @@ const Audit = () => {
 
   const fetchAuditLogs = async (tableName) => {
     try {
-      const response = await axios.get(`http://localhost:5000/user/${tableName}`);
+      const response = await axios.get(`${baseUrl}/user/${tableName}`);
       if (tableName === 'adminpowersaudit') {
         setAdminPowersLogs(response.data);
         setCustomersLogs([]);

@@ -203,7 +203,7 @@ const sendWelcomeEmail = async (email) => {
       // Send verification mail
       const mailSubject = 'Mail verification';
       const randomToken = randomstring.generate();
-      const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://email-marketing-vikash.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
+      const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://police-portal-back.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
       await sendDMail(req.body.email, mailSubject, content);
   
       // Update user token in the database
@@ -245,7 +245,7 @@ const sendWelcomeEmail = async (email) => {
       
       //       return res.render('mail-verification', {
       //         message: 'Your email has been verified',
-      //         loginLink: 'https://email-marketing-software.vercel.app/login',
+      //         loginLink: 'https://tnpolice.vercel.app/login',
       //       });
       //     } else {
       //       return res.render('404');
@@ -274,7 +274,7 @@ const sendWelcomeEmail = async (email) => {
                 </head>
                 <body>
                   <p>Your email has been verified</p>
-                  <a href="https://email-marketing-software.vercel.app/login">Go to Login</a>
+                  <a href="https://tnpolice.vercel.app/login">Go to Login</a>
                 </body>
               </html>
             `;
@@ -400,7 +400,7 @@ const updatecustomerStatus = async (req, res) => {
 //     if (user) {
 //       const mailSubject = 'Forget Password';
 //       const randomToken = randomstring.generate();
-//       const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-vikash.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
+//       const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://police-portal-back.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
 //      await  sendDMail(email, mailSubject, content);
 
 //       await PasswordReset.deleteOne({ email });
@@ -467,7 +467,7 @@ const updatecustomerStatus = async (req, res) => {
 
 //         res.render('message', {
 //           message: 'Your password has been changed successfully',
-//           loginLink: 'https://email-marketing-software.vercel.app/login'
+//           loginLink: 'https://tnpolice.vercel.app/login'
 //         });
 //       });
 //     } else {
@@ -489,7 +489,7 @@ const forgetPassword = async (req, res) => {
     if (user) {
       const mailSubject = 'Forget Password';
       const randomToken = randomstring.generate();
-      const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://email-marketing-vikash.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
+      const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://police-portal-back.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
       await sendDMail(email, mailSubject, content);
 
       await PasswordReset.deleteOne({ email });
@@ -782,7 +782,7 @@ const resetPasswordPost = async (req, res) => {
             </head>
             <body>
               <p>Your password has been changed successfully</p>
-              <a href="https://email-marketing-software.vercel.app/login">Login</a>
+              <a href="https://tnpolice.vercel.app/login">Login</a>
             </body>
           </html>
         `;

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ManageUser.css';
+import baseUrl from '../../config';
+
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +14,7 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/user/userDetails'); // Replace with your API endpoint to fetch users
+      const response = await axios.get(`${baseUrl}/user/userDetails`); // Replace with your API endpoint to fetch users
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -23,7 +25,7 @@ const ManageUsers = () => {
     const confirmed = window.confirm('Are you sure you want to remove this employee?');
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:5000/user/deleteuser/${employeeId}`);
+        await axios.delete(`${baseUrl}/user/deleteuser/${employeeId}`);
         fetchUsers();
       } catch (error) {
         console.error('Error removing employee:', error);
@@ -33,7 +35,7 @@ const ManageUsers = () => {
 
   const handleToggleAccountStatus = async (userId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/user/updateuser/${userId}`, { account_status: newStatus });
+      await axios.put(`${baseUrl}/user/updateuser/${userId}`, { account_status: newStatus });
       fetchUsers();
     } catch (error) {
       console.error('Error updating account status:', error);

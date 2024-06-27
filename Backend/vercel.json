@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "mail-app",
+    "name": "police-app",
     "builds": [
        { "src": "index.js", "use": "@vercel/node" }
     ],

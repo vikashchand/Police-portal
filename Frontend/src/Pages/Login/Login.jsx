@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import work from '../../assets/tamil.jpg';
+import baseUrl from '../../config';
+
 const initialValues = {
   identifier: '',
   password: '',
@@ -34,7 +36,7 @@ const Login = () => {
 
   const loginHandle = () => {
     axios
-      .post('http://localhost:5000/user/login',{
+      .post(`${baseUrl}/user/login`,{
         identifier: values.identifier,  // Add the identifier value here
   password: values.password
       })

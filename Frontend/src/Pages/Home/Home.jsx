@@ -1,7 +1,7 @@
 import React from 'react';
 import './Home.css';
 import { Routes, Route } from 'react-router-dom';
-import About from '../about/About';
+
 import SideeNav from '../../components/SideeNav';
 import LandingPage from '../LandingPage/LandingPage';
 import ManageUsers from '../manage users/ManageUsers';
@@ -22,7 +22,7 @@ const Home = () => {
         </div>
         <Routes>
           <Route path="/LandingPage" element={<LandingPage />} />
-          <Route path="/about" element={<About />} />
+        
           <Route path="/registerCase" element={<RegisterCase />} />
           <Route path="/Caseslist" element={<CasesList />} />
           <Route path="/Caseslist/:id" element={<CaseDetails />} />

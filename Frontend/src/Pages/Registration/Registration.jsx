@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Registration.css'
 import axios from 'axios';
 import work from '../../assets/police.png';
+import baseUrl from '../../config';
+
 
 const initialValues = {
     username: "",
@@ -28,7 +30,7 @@ const Registration = () => {
  
 
   const signupHandle =()=>{
-    axios.post('http://localhost:5000/user/register',{
+    axios.post(`${baseUrl}/user/register`,{
       username:values.username,email:values.email,password:values.password
     }).then((data)=>{
       if(data.data.status===200){

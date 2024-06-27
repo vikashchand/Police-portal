@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './RegisterCase.css';
+import baseUrl from '../../config';
 
 const RegisterCase = () => {
   const [caseDetails, setCaseDetails] = useState({
@@ -25,7 +26,7 @@ const RegisterCase = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/upload', caseDetails);
+      const response = await axios.post(`${baseUrl}/upload`, caseDetails);
       console.log('Case registered:', response.data);
 
       // Show success toast

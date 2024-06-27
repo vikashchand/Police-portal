@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './CasesList.css';
-
+import baseUrl from '../../config';
 const CasesList = () => {
   const [cases, setCases] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,7 +10,7 @@ const CasesList = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/cases');
+        const response = await axios.get(`${baseUrl}/cases`);
         setCases(response.data);
       } catch (error) {
         console.error('Error fetching cases:', error);

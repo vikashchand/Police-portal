@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import './CaseDetails.css';
+import baseUrl from '../../config';
 
 const CaseDetails = () => {
   const { id } = useParams(); // Get case ID from URL params
@@ -23,7 +24,7 @@ const CaseDetails = () => {
   useEffect(() => {
     const fetchCaseDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/cases/${id}`);
+        const response = await axios.get(`${baseUrl}/cases/${id}`);
         setCaseDetails(response.data);
         setEditCase({
           description: response.data.description,
@@ -51,7 +52,7 @@ const CaseDetails = () => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/cases/${id}`, editCase);
+      const response = await axios.put(`${baseUrl}/cases/${id}`, editCase);
       setCaseDetails(response.data);
       setEditMode(false);
     } catch (error) {
