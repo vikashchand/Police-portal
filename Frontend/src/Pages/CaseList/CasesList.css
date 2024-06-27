@@ -1,0 +1,73 @@
+.cases-list-container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+}
+
+.cases-list-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cases-list-container th, .cases-list-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.cases-list-container th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.cases-list-container input[type="text"], .cases-list-container select, .cases-list-container textarea {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.cases-list-container button {
+  padding: 5px 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.search-container {
+  margin-bottom: 10px;
+}
+
+.search-container label {
+  margin-right: 10px;
+}
+
+
+@media only screen and (max-width: 768px) {
+
+  .cases-list-container {
+    width: 80%;
+    margin: auto;
+  padding-top: 50px;
+
+    padding-left: 0%;
+
+    font-size: smaller;
+  }
+
+
+
+  .cases-list-container table {
+    width: 70%;
+    border-collapse: collapse;
+  }
+  
+  .cases-list-container th, .cases-list-container td {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
+  
+  .cases-list-container th {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+  
+
+}

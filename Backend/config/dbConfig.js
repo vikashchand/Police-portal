@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGODB_URI ,{ 
-  dbName: "Infosys",
+  dbName: "policeportal",
   
   useNewUrlParser: true, useUnifiedTopology: true });
 

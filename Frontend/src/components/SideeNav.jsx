@@ -46,7 +46,7 @@ const SideeNav = () => {
     {isNavOpen ? 'Home' : <AiFillHome />}
       
     </NavLink>
-    <NavLink to={'/home/Customers'} >
+    <NavLink to={'/home/registercase'} >
        
     {isNavOpen ? 'Customer Details' : <HiUserGroup/>}
 
@@ -56,8 +56,8 @@ const SideeNav = () => {
           { (
 
             <>
-            <NavLink to={'/home/task'} >
-            {isNavOpen ? 'Manage templates' : <FaEnvelope />}
+            <NavLink to={'/home/Caseslist'} >
+            {isNavOpen ? 'Manage Cases' : <FaEnvelope />}
             </NavLink>
             <NavLink to="/home/employees" >
             {isNavOpen ? 'Manage Employees' : <MdAdminPanelSettings/>}

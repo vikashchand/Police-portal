@@ -67,7 +67,8 @@
   @media only screen and (max-width: 600px) {
     .manage-users-container table th:nth-child(2),
     .manage-users-container table td:nth-child(2),
-   
+    .manage-users-container table th:nth-child(7),
+    .manage-users-container table td:nth-child(7),
     .manage-users-container table th:nth-child(4),
     .manage-users-container table td:nth-child(4),
     .manage-users-container table th:nth-child(5),
@@ -92,10 +93,7 @@
     }
   
     /* Style buttons */
-    .manage-users-container table button {
-      padding: 0;
-      font-size: 10px;
-    }
+ 
   }
   
   /* Hide columns on medium screens */
@@ -118,15 +116,46 @@
     .manage-users-container table td:nth-child(7),
     .manage-users-container table th:nth-child(10),
     .manage-users-container table td:nth-child(10) {
-      width: 10%;
+      width: 8%;
     }
   
     /* Style buttons */
     .manage-users-container table button {
-      padding: 10px 8px;
+      padding: 3px 1px;
       
-      border-radius: 5px;
-      font-size: 12px;
+      border-radius: 2px;
+      font-size:x-small;
     }
+
+    .manage-users-container  {
+    
+      font-size: x-small;
+      margin-top: 40px;
+     
+    }
+  
+    .manage-users-container table th,
+  .manage-users-container table td {
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  
+  .manage-users-container .emplist {
+    display: flex;
+    flex-direction: column;
+   
+    justify-content:flex-start;
+   
+    width: 50%;
+  }
+
+  .manage-users-container .tablerow {
+    
+    padding: 0.2px;
+    width: 80%;
+    border-radius: 2px;
+   
+  }
   }
   

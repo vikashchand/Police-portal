@@ -26,6 +26,8 @@ function App() {
       
       <Route path="/temp/*" element={<Task/>} />
       <Route path="*" element={<NotFound />} /> {/* Add a catch-all route */}
+
+  
     </Routes>
     
       </div>

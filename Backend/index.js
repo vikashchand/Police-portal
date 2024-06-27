@@ -23,7 +23,7 @@ const mailRoutes = require('./Routes/mailRoutes');
 // Use your routes
 
 const corsOptions = {
-   origin: 'https://email-marketing-software.vercel.app',
+   origin: 'http://localhost:3000',
    credentials: true,
    optionSuccessStatus: 200,
  };
