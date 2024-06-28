@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { loginSchema } from '../../Schemas/index';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,8 @@ const initialValues = {
 };
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const {
     values,
@@ -99,19 +101,19 @@ const Login = () => {
                   ) : null}
                 </div>
                 <div className="input-block">
-                  <label htmlFor="password" className="input-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    autoComplete="off"
-                    name="password"
-                    id="password"
-                    placeholder="Password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                <label htmlFor="password" className="input-label"  onClick={() => setShowPassword(!showPassword)}>
+                  Password  👁️
+                </label>
+                <input
+                type={showPassword ? 'text' : 'password'}
+                  autoComplete="off"
+                  name="password"
+                  id="password"
+                  placeholder="Password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
                   {errors.password && touched.password ? (
                     <p className="form-error">{errors.password}</p>
                   ) : null}
