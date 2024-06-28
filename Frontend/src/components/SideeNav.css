@@ -8,7 +8,7 @@
   padding: 0px;
   margin-top: 0px;
   margin-bottom: 0px;
-  height: 100vh;
+position: fixed;
   /* ... */
 }
 .hamburger-icons{
@@ -100,5 +100,11 @@
 
   .sidenav-container.expanded {
     display: none;
+  }
+
+  .sidenav-container{
+
+    position:static;
+    
   }
 }

@@ -33,7 +33,7 @@ const Audit = () => {
   const renderTable = () => {
     if (selectedTable === 'adminpowersaudit') {
       return (
-        <table>
+        <table >
           <thead>
             <tr>
               <th>Email</th>
@@ -111,7 +111,7 @@ const Audit = () => {
   };
 
   return (
-    <div>
+    <div  className='cases-list-container'>
       <br />
       <br />
       <br />

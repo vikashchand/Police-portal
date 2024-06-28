@@ -1,31 +1,43 @@
 @media only screen and (max-width: 768px) {
 
-    Table {
-        
-        word-wrap: break-word; /* Handles long words */
-        overflow-wrap: break-word; 
-    }
 
     
  
    table {
-    width: 70%;
+   
     border-collapse: collapse;
-    font-size:xx-small;
+    font-size:5px;
+    word-wrap: break-word; /* Handles long words */
+    overflow-wrap: break-word;
+    
   }
 
  th,  td {
     border: 1px solid #ddd;
     padding: 2px;
+    font-size:5px;
+  
   }
 th {
     background-color: #f2f2f2;
     text-align: center;
+    font-size:5px;
   }
 
   /* Ensure text wraps */
  td {
     word-wrap: break-word; /* Handles long words */
     overflow-wrap: break-word;
+    font-size:5px;
+  }
+
+  tr{
+    height: 20px;
+    font-size:5px;
+  }
+
+  button{
+    font-size:5px;
+    padding: 10px 10px;
   }
 }

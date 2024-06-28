@@ -8,6 +8,7 @@ import NotFound from './Pages/NotFound';
 
 
 import ResetPassword from './Pages/Login/ResetPassword';
+import SideeNav from './components/SideeNav';
 
 
 
@@ -16,6 +17,7 @@ function App() {
   return (
     <Router>
       <div className="App">
+      
       <Routes>
       <Route path="/" element={<Registration />} />
       <Route path="/login" element={<Login />} />
