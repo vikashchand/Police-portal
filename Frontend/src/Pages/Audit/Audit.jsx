@@ -85,10 +85,10 @@ const Audit = () => {
           <thead>
             <tr>
              
-              <th>Actor</th>
+              <th>Policeid</th>
               <th>Action</th>
               <th>Time</th>
-              <th>Type</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -99,7 +99,7 @@ const Audit = () => {
                 <td>{keyy.action}</td>
                 
                 <td>{new Date(keyy.time).toLocaleDateString()}</td>
-                <td>{keyy.type}</td>
+                
               </tr>
             ))}
           </tbody>

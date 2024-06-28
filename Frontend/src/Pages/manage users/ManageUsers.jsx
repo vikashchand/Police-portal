@@ -65,6 +65,8 @@ const ManageUsers = () => {
           value={searchQuery} 
           onChange={handleSearchChange} 
         />
+
+        <br></br>
         <table>
           <thead>
             <tr>

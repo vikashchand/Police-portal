@@ -1,7 +1,7 @@
 
 
 import React,{useState} from 'react';
-//import jwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { NavLink } from 'react-router-dom';
 import './SideeNav.css'; // Import the CSS file
 import { FaBars,FaUserShield } from 'react-icons/fa';
@@ -17,17 +17,17 @@ import {SiAdguard} from 'react-icons/si';
 const SideeNav = () => {
 
 
- // const navigate = useNavigate();
+ //const navigate = useNavigate();
  const [isNavOpen, setIsNavOpen] = useState(false);
-  // const token = localStorage.getItem('userInfo');
-  // let decodedToken = jwtDecode(token);
-  // const role = decodedToken.data.is_admin;
-  // console.log(role, 'gg');
+  const token = localStorage.getItem('userInfo');
+  let decodedToken = jwtDecode(token);
+  const role = decodedToken.data.is_admin;
+  console.log(role, 'gg');
 
 
 
   const handleLogout = () => {
-    //localStorage.removeItem('userInfo');
+    localStorage.removeItem('userInfo');
     window.location.href = '/login';
   };
   const toggleNav = () => {
@@ -46,28 +46,32 @@ const SideeNav = () => {
     {isNavOpen ? 'Home' : <AiFillHome />}
       
     </NavLink>
-
-    <NavLink to={'/home/Dashboard'}  className="active-link">
-    {isNavOpen ? 'Dashboard' : <HiDocumentReport/>}
-      
-    </NavLink>
-
-
-
- 
     <NavLink to={'/home/registercase'} >
        
     {isNavOpen ? 'create FIR' : <MdEdit/>}
 
 
   </NavLink>
+    <NavLink to={'/home/Caseslist'} >
+    {isNavOpen ? 'Manage Cases' : <CiViewList />}
+    </NavLink>
+
+
+
+
+ 
+   
           
-          { (
+           {role ==1 && (
 
             <>
-            <NavLink to={'/home/Caseslist'} >
-            {isNavOpen ? 'Manage Cases' : <CiViewList />}
-            </NavLink>
+           
+
+            
+    <NavLink to={'/home/Dashboard'}  className="active-link">
+    {isNavOpen ? 'Dashboard' : <HiDocumentReport/>}
+      
+    </NavLink>
             <NavLink to="/home/employees" >
             {isNavOpen ? 'Manage Employees' : <FaUserShield/>}
             

@@ -9,7 +9,7 @@
     font-size:5px;
     word-wrap: break-word; /* Handles long words */
     overflow-wrap: break-word;
-    
+
   }
 
  th,  td {
@@ -38,6 +38,6 @@ th {
 
   button{
     font-size:5px;
-    padding: 10px 10px;
+   
   }
 }

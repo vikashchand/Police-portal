@@ -10,11 +10,18 @@ import RegisterCase from '../CaseRegist/RegisterCase';
 import CasesList from '../CaseList/CasesList';
 import CaseDetails from '../CaseList/CaseDetails';
 import Dashboard from '../../Dashboards/Dashboard';
-
+import jwtDecode from 'jwt-decode';
 const Home = () => {
+
+  const token = localStorage.getItem('userInfo');
+  let decodedToken = jwtDecode(token);
+  console.log(decodedToken, 'decodedToken');
+  const role = decodedToken.data.is_admin;
+  console.log(role, 'ghg');
   return (
     <div className="home-container">
       <div className="side-nav-container">
+     
         <SideeNav />
       </div>
       <div className="content-container">
@@ -23,13 +30,23 @@ const Home = () => {
         </div>
         <Routes>
           <Route path="/LandingPage" element={<LandingPage />} />
-          <Route path="/dashboard" element={ <Dashboard/> } />
+         
           <Route path="/registerCase" element={<RegisterCase />} />
           <Route path="/Caseslist" element={<CasesList />} />
           <Route path="/Caseslist/:id" element={<CaseDetails />} />
-          <Route path="/employees" element={<ManageUsers />} />
-          <Route path="/audit" element={<Audit />} />
+         
       
+
+          {role == 1 && (
+            <>
+            <Route path="/dashboard" element={ <Dashboard/> } />
+            <Route path="/employees" element={<ManageUsers />} />
+            <Route path="/audit" element={<Audit />} />
+
+            </>
+          )}
+
+
         </Routes>
       </div>
     </div>

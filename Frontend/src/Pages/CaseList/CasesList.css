@@ -2,7 +2,11 @@
   width: 80%;
   margin: auto;
   padding: 20px;
+  align-items: center;
+  justify-content: center;
+  
 }
+
 
 .cases-list-container table {
   width: 100%;
@@ -26,9 +30,12 @@
 }
 
 .cases-list-container button {
-  padding: 5px 10px;
+  padding: 10px 15px;
   margin: 5px;
   cursor: pointer;
+  border-radius: 1px solid black;
+ margin-bottom: 20px;
+
 }
 
 .search-container {
@@ -47,11 +54,17 @@
     margin: auto;
   padding-top: 50px;
 
-    padding-left: 0%;
+
 
     font-size:xx-small;
     word-wrap: break-word; /* Handles long words */
     overflow-wrap: break-word; 
+
+  
+    align-items: center;
+    justify-content: center;
+
+    
   }
 
 
@@ -60,7 +73,12 @@
     width: 70%;
     border-collapse: collapse;
 
+    align-items: center;
+    justify-content: center;
+    
+
     font-size:xx-small;
+    margin: 0 auto;
   }
   
   .cases-list-container th, .cases-list-container td {

@@ -93,10 +93,15 @@ const sendWelcomeEmail = async (email) => {
   
     try {
       // Find the user by email or username
-      const user = await User.findOne({
-        $or: [{ email: identifier }, { username: identifier }],
-      });
-  
+      const lowerCaseIdentifier = identifier.toLowerCase();
+
+    // Find the user by email or username (case-insensitive)
+    const user = await User.findOne({
+      $or: [
+        { email: lowerCaseIdentifier },
+        { username: { $regex: new RegExp(`^${lowerCaseIdentifier}$`, 'i') } },
+      ],
+    });
       if (!user) {
         return res.json({
           status: 400,
@@ -164,9 +169,12 @@ const sendWelcomeEmail = async (email) => {
 
 
   const userSignup = async (req, res) => {
-    const { username, email, password } = req.body;
+    let { username, email, password } = req.body;
   
     try {
+
+      username = username.toLowerCase();
+      email=email.toLowerCase();
       // Check if the email already exists
       const existingUser = await User.findOne({ email });
       if (existingUser) {
@@ -177,7 +185,9 @@ const sendWelcomeEmail = async (email) => {
       }
   
       // Check if the username already exists
-      const existingUsername = await User.findOne({ username });
+      const existingUsername = await User.findOne({
+        username: { $regex: new RegExp(`^${username}$`, 'i') },
+      });
       if (existingUsername) {
         return res.json({
           status: 400,
