@@ -37,6 +37,7 @@ const Audit = () => {
           <thead>
             <tr>
               <th>Email</th>
+              <th>CaseId</th>
               <th>Type</th>
             
               <th>Time</th>
@@ -46,6 +47,7 @@ const Audit = () => {
           {adminPowersLogs.map((audi) => (
             <tr key={`adminpowers_${audi._id}`}>
               <td>{audi.email}</td>
+              <td>{audi.case_id}</td>
               <td>{audi.type}</td>
            
               <td>{new Date(audi.time).toLocaleDateString()}</td>
@@ -95,6 +97,7 @@ const Audit = () => {
                
                 <td>{keyy.actor}</td>
                 <td>{keyy.action}</td>
+                
                 <td>{new Date(keyy.time).toLocaleDateString()}</td>
                 <td>{keyy.type}</td>
               </tr>
@@ -116,7 +119,7 @@ const Audit = () => {
       <h1>"Traceability Chronicles" </h1>
       <h3>Unveiling User Footprints - Audit Trail and Activity Logs</h3>
       <button onClick={() => fetchAuditLogs('audit')}>Login Logs</button>
-      <button onClick={() => fetchAuditLogs('adminpowersaudit')}>Admin Logs</button>
+      <button onClick={() => fetchAuditLogs('adminpowersaudit')}>Case Logs</button>
      
       </div>
       {renderTable()}

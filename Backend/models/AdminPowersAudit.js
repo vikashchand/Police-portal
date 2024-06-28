@@ -9,6 +9,10 @@ const AdminPowersAuditSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  case_id:{
+    type: String,
+    required: false,
+  },
 
   time: {
     type: Date,

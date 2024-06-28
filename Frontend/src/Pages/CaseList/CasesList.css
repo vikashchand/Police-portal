@@ -49,7 +49,9 @@
 
     padding-left: 0%;
 
-    font-size: smaller;
+    font-size:xx-small;
+    word-wrap: break-word; /* Handles long words */
+    overflow-wrap: break-word; 
   }
 
 
@@ -57,6 +59,8 @@
   .cases-list-container table {
     width: 70%;
     border-collapse: collapse;
+
+    font-size:xx-small;
   }
   
   .cases-list-container th, .cases-list-container td {
@@ -70,4 +74,36 @@
   }
   
 
+}
+
+
+@media only screen and (max-width: 768px) {
+  .cases-list-container {
+    width: 80%;
+    margin: auto;
+    padding-top: 50px;
+    padding-left: 0%;
+    font-size:xx-small;
+  }
+
+   table {
+    width: 70%;
+    border-collapse: collapse;
+    font-size:xx-small;
+  }
+
+ th,  td {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
+th {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+
+  /* Ensure text wraps */
+ td {
+    word-wrap: break-word; /* Handles long words */
+    overflow-wrap: break-word;
+  }
 }

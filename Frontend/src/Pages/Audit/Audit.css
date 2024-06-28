@@ -1,0 +1,31 @@
+@media only screen and (max-width: 768px) {
+
+    Table {
+        
+        word-wrap: break-word; /* Handles long words */
+        overflow-wrap: break-word; 
+    }
+
+    
+ 
+   table {
+    width: 70%;
+    border-collapse: collapse;
+    font-size:xx-small;
+  }
+
+ th,  td {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
+th {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+
+  /* Ensure text wraps */
+ td {
+    word-wrap: break-word; /* Handles long words */
+    overflow-wrap: break-word;
+  }
+}

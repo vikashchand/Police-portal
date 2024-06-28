@@ -24,7 +24,8 @@ router.post('/upload', async (req, res) => {
     // Log admin action
     const auditLogs = new AdminPowersAudit({
       email: email,
-      type: 'create_case',
+      type: 'created_case',
+      case_id:req.body.caseId,
     });
     await auditLogs.save();
 
@@ -68,7 +69,8 @@ router.put('/cases/:id', async (req, res) => {
    
     const auditLogs = new AdminPowersAudit({
       email: email,
-      type: 'update_case',
+      type: 'updated_case',
+      case_id: req.params.id,
     });
     await auditLogs.save();
 
@@ -111,7 +113,8 @@ router.put('/:id', async (req, res) => {
    
     const auditLogs = new AdminPowersAudit({
       email: email,
-      type: 'update_case',
+      type: 'updated_case',
+      case_id:caseId,
     });
     await auditLogs.save();
 

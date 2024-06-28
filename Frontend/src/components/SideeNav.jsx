@@ -4,12 +4,12 @@ import React,{useState} from 'react';
 //import jwtDecode from 'jwt-decode';
 import { NavLink } from 'react-router-dom';
 import './SideeNav.css'; // Import the CSS file
-import { FaBars } from 'react-icons/fa';
+import { FaBars,FaUserShield } from 'react-icons/fa';
 import { FaEnvelope } from 'react-icons/fa';
 
 import {HiUserGroup,HiDocumentReport} from 'react-icons/hi';
-import{MdAdminPanelSettings} from 'react-icons/md';
-
+import{MdAdminPanelSettings,MdEdit} from 'react-icons/md';
+import {CiViewList} from 'react-icons/ci'
 import { AiFillHome } from 'react-icons/ai';
 import { FiLogOut} from 'react-icons/fi'
 import {SiAdguard} from 'react-icons/si';
@@ -57,7 +57,7 @@ const SideeNav = () => {
  
     <NavLink to={'/home/registercase'} >
        
-    {isNavOpen ? 'Customer Details' : <HiUserGroup/>}
+    {isNavOpen ? 'create FIR' : <MdEdit/>}
 
 
   </NavLink>
@@ -66,10 +66,10 @@ const SideeNav = () => {
 
             <>
             <NavLink to={'/home/Caseslist'} >
-            {isNavOpen ? 'Manage Cases' : <FaEnvelope />}
+            {isNavOpen ? 'Manage Cases' : <CiViewList />}
             </NavLink>
             <NavLink to="/home/employees" >
-            {isNavOpen ? 'Manage Employees' : <MdAdminPanelSettings/>}
+            {isNavOpen ? 'Manage Employees' : <FaUserShield/>}
             
             
             
