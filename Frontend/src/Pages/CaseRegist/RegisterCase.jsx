@@ -54,8 +54,7 @@ const RegisterCase = () => {
     <br></br>
     <h1>Register new case</h1>
     <div className="register-case-container">
-      <ToastContainer />
-    
+     
       <form onSubmit={handleSubmit}>
       <div className='c'>
         <div>
@@ -79,6 +78,8 @@ const RegisterCase = () => {
       </form>
      
     </div>
+    <ToastContainer />
+    
     </div>
   );
 };
