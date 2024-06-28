@@ -38,7 +38,7 @@ const Audit = () => {
             <tr>
               <th>Email</th>
               <th>Type</th>
-              <th>Template Name</th>
+            
               <th>Time</th>
             </tr>
           </thead>
@@ -47,8 +47,8 @@ const Audit = () => {
             <tr key={`adminpowers_${audi._id}`}>
               <td>{audi.email}</td>
               <td>{audi.type}</td>
-              <td>{audi.template_name}</td>
-              <td>{audi.time}</td>
+           
+              <td>{new Date(audi.time).toLocaleDateString()}</td>
             </tr>
           ))}
           
@@ -71,7 +71,7 @@ const Audit = () => {
                 <td>{log.id}</td>
                
                 <td>{log.uploadedby}</td>
-                <td>{log.date}</td>
+                <td>{new Date(log.date).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
@@ -95,7 +95,7 @@ const Audit = () => {
                
                 <td>{keyy.actor}</td>
                 <td>{keyy.action}</td>
-                <td>{keyy.time}</td>
+                <td>{new Date(keyy.time).toLocaleDateString()}</td>
                 <td>{keyy.type}</td>
               </tr>
             ))}
@@ -115,9 +115,9 @@ const Audit = () => {
       <div className='audibutton'>
       <h1>"Traceability Chronicles" </h1>
       <h3>Unveiling User Footprints - Audit Trail and Activity Logs</h3>
-      <button onClick={() => fetchAuditLogs('audit')}>Audit Logs</button>
+      <button onClick={() => fetchAuditLogs('audit')}>Login Logs</button>
       <button onClick={() => fetchAuditLogs('adminpowersaudit')}>Admin Logs</button>
-      <button onClick={() => fetchAuditLogs('customers')}> Upload Logs</button>
+     
       </div>
       {renderTable()}
     </div>

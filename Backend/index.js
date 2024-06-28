@@ -13,11 +13,10 @@ const user=require('./Routes/userRouter')
 const webRouter=require('./Routes/webRoutes')
 const templateRoutes = require('./Routes/templateRoutes');
 
-const customerRoutes = require('./Routes/customerRoutes');
+const customerRoutes= require('./Routes/customerRoutes')
 
 
 const bodyParser = require('body-parser')
-const mailRoutes = require('./Routes/mailRoutes');
 
 
 // Use your routes
@@ -48,9 +47,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/template', templateRoutes);
 app.use('/user', user);
-app.use('/mail', mailRoutes);
+app.use('/',customerRoutes);
 app.use('/', webRouter);
-app.use('/', customerRoutes);
+
 const PORT =process.env.PORT
 
 app.listen(PORT,console.log(`server is listening on ${PORT}`))

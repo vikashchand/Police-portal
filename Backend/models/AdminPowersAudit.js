@@ -9,13 +9,10 @@ const AdminPowersAuditSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  template_name: {
-    type: String,
-    required: true,
-  },
+
   time: {
-    type: Date
-   
+    type: Date,
+    default: Date.now,
   },
   
 });

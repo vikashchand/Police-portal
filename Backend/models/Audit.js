@@ -14,8 +14,8 @@ const AuditSchema = new  mongoose.Schema({
     required: true,
   },
   time: {
-    type: Date
-    
+    type: Date,
+    default: Date.now,
   },
 });
 ;

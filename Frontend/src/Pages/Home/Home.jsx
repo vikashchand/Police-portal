@@ -9,6 +9,7 @@ import Audit from '../Audit/Audit';
 import RegisterCase from '../CaseRegist/RegisterCase';
 import CasesList from '../CaseList/CasesList';
 import CaseDetails from '../CaseList/CaseDetails';
+import Dashboard from '../../Dashboards/Dashboard';
 
 const Home = () => {
   return (
@@ -22,7 +23,7 @@ const Home = () => {
         </div>
         <Routes>
           <Route path="/LandingPage" element={<LandingPage />} />
-        
+          <Route path="/dashboard" element={ <Dashboard/> } />
           <Route path="/registerCase" element={<RegisterCase />} />
           <Route path="/Caseslist" element={<CasesList />} />
           <Route path="/Caseslist/:id" element={<CaseDetails />} />

@@ -78,6 +78,10 @@ const CaseDetails = () => {
           <span className="detail-value">{new Date(caseDetails.reportedDate).toLocaleDateString()}</span>
         </div>
         <div className="detail-row">
+        <span className="detail-label">Location:</span>
+        <span className="detail-value">{caseDetails.location}</span>
+      </div>
+        <div className="detail-row">
           <span className="detail-label">Status:</span>
           {editMode ? (
             <select name="status" value={editCase.status} onChange={handleChange}>

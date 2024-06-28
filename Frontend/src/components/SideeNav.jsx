@@ -7,7 +7,7 @@ import './SideeNav.css'; // Import the CSS file
 import { FaBars } from 'react-icons/fa';
 import { FaEnvelope } from 'react-icons/fa';
 
-import {HiUserGroup} from 'react-icons/hi';
+import {HiUserGroup,HiDocumentReport} from 'react-icons/hi';
 import{MdAdminPanelSettings} from 'react-icons/md';
 
 import { AiFillHome } from 'react-icons/ai';
@@ -46,6 +46,15 @@ const SideeNav = () => {
     {isNavOpen ? 'Home' : <AiFillHome />}
       
     </NavLink>
+
+    <NavLink to={'/home/Dashboard'}  className="active-link">
+    {isNavOpen ? 'Dashboard' : <HiDocumentReport/>}
+      
+    </NavLink>
+
+
+
+ 
     <NavLink to={'/home/registercase'} >
        
     {isNavOpen ? 'Customer Details' : <HiUserGroup/>}
