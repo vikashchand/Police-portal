@@ -1,8 +1,6 @@
-
 # Police Portal
 
-**LInk**: [https://tnpolice.vercel.app/](https://tnpolice.vercel.app/)
-
+**LInk**: [https://uppolice.vercel.app/](https://uppolice.vercel.app/)
 
 ## Introduction
 
@@ -39,7 +37,5 @@ Police Portal is a comprehensive web application designed for police departments
 ![image](https://github.com/vikashchand/Police-portal/assets/72156896/4d7dde58-a5ed-4734-81f0-3fa6293d7487)
 ![image](https://github.com/vikashchand/Police-portal/assets/72156896/9571cd12-ad56-47bf-ae66-059abf99a8e0)
 ![image](https://github.com/vikashchand/Police-portal/assets/72156896/0b48ab8f-786c-4e4a-8f20-74e2d92e8fdc)
-
-
 
 feel free to contact me for using this

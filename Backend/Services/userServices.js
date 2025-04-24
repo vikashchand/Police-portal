@@ -1,272 +1,248 @@
-const dbCon = require('../config/dbConfig');
-const mongoose = require('mongoose');
+const dbCon = require("../config/dbConfig");
+const mongoose = require("mongoose");
 
+const randomstring = require("randomstring");
 
-const randomstring = require('randomstring');
+const sendDMail = require("../helpers/sendDMail");
 
-const sendDMail = require('../helpers/sendDMail');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const SECURITYKEY = process.env.SECURITYKEY;
+const User = require("../models/User");
+const Audit = require("../models/Audit");
+const Adminpowersaudit = require("../models/AdminPowersAudit");
 
-const bcrypt=require('bcryptjs')
-const jwt =require('jsonwebtoken')
-const SECURITYKEY=process.env.SECURITYKEY
-const User = require('../models/User');
-const Audit = require('../models/Audit');
-const Adminpowersaudit = require('../models/AdminPowersAudit');
+const PasswordReset = require("../models/passwordReset");
 
-const PasswordReset = require('../models/passwordReset');
+const fs = require("fs");
+const currentTime = new Date().toISOString("en-US", {
+  timeZone: "Asia/Kolkata",
+});
 
-const fs = require('fs');
-const currentTime = new Date().toISOString("en-US", { timeZone: "Asia/Kolkata" });
+const env = require("dotenv").config();
+const SMTP_MAIL = process.env.SMTP_MAIL;
+const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
 
-const env=require('dotenv').config()
-const SMTP_MAIL= process.env.SMTP_MAIL
-const SMTP_PASSWORD =process.env.SMTP_PASSWORD
-
-const nodemailer = require('nodemailer');
-const { get } = require('http');
+const nodemailer = require("nodemailer");
+const { get } = require("http");
 let loggedInUserEmail;
-
-
 
 const sendWelcomeEmail = async (email) => {
   try {
- // const htmlTemplate = fs.readFileSync('otp.html', 'utf8');
-  // Create a nodemailer transporter using your email service configuration
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    port: 465,
-    secure: true,
-    auth: {
-      user: SMTP_MAIL,
-      pass: SMTP_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: false
-    }
-  });
-  // Prepare the email content
- 
-  const mailOptions = {
-    from: SMTP_MAIL,
-    to: email,
-    subject: 'You logged in successfully',
-    html: `<p>Hi,</p><p>You have successfully logged in to your account.</p><p>Date and Time: ${currentTime}</p>`
-  };
-   // Send the email
-   await transporter.sendMail(mailOptions);
-   console.log('login Email sent successfully!');
+    // const htmlTemplate = fs.readFileSync('otp.html', 'utf8');
+    // Create a nodemailer transporter using your email service configuration
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      secure: true,
+      auth: {
+        user: SMTP_MAIL,
+        pass: SMTP_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+    // Prepare the email content
+
+    const mailOptions = {
+      from: SMTP_MAIL,
+      to: email,
+      subject: "You logged in successfully",
+      html: `<p>Hi,</p><p>You have successfully logged in to your account.</p><p>Date and Time: ${currentTime}</p>`,
+    };
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    console.log("login Email sent successfully!");
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     throw error;
   }
 };
 
-  
+const auditLog = async (actor, type) => {
+  const action = type === "login" ? "User login" : "User signup";
+  const time = new Date().toISOString();
 
+  try {
+    const auditEntry = new Audit({
+      actor,
+      type,
+      action,
+      time,
+    });
 
-  const auditLog = async (actor, type) => {
-    const action = (type === 'login') ? 'User login' : 'User signup';
-    const time = new Date().toISOString();
-  
-    try {
-      const auditEntry = new Audit({
-        actor,
-        type,
-        action,
-        time,
-      });
-  
-      await auditEntry.save();
-      console.log('Audit log saved successfully');
-    } catch (error) {
-      console.error('Error saving audit log:', error);
-    }
-  };
-  
- 
-  
+    await auditEntry.save();
+    console.log("Audit log saved successfully");
+  } catch (error) {
+    console.error("Error saving audit log:", error);
+  }
+};
 
+const userLogin = async (req, res) => {
+  const { identifier, password } = req.body;
 
-
-  const userLogin = async (req, res) => {
-    const { identifier, password } = req.body;
-  
-    try {
-      // Find the user by email or username
-      const lowerCaseIdentifier = identifier.toLowerCase();
+  try {
+    // Find the user by email or username
+    const lowerCaseIdentifier = identifier.toLowerCase();
 
     // Find the user by email or username (case-insensitive)
     const user = await User.findOne({
       $or: [
         { email: lowerCaseIdentifier },
-        { username: { $regex: new RegExp(`^${lowerCaseIdentifier}$`, 'i') } },
+        { username: { $regex: new RegExp(`^${lowerCaseIdentifier}$`, "i") } },
       ],
     });
-      if (!user) {
-        return res.json({
-          status: 400,
-          message: 'User does not exist',
+    if (!user) {
+      return res.json({
+        status: 400,
+        message: "User does not exist",
+      });
+    }
+
+    const accountStatus = user.account_status;
+
+    if (accountStatus === "active") {
+      const hashedPassword = user.password;
+
+      const isAdmin = user.is_admin;
+      const query = { is_admin: { $eq: isAdmin } };
+
+      const isMatch = await bcrypt.compare(password.trim(), hashedPassword);
+
+      if (isMatch) {
+        // Fetch additional user data if needed
+        const data2 = user.toJSON(); // Convert user object to JSON or extract required fields
+
+        const auth = jwt.sign({ data: data2 }, SECURITYKEY);
+
+        user.last_login = new Date();
+        await user.save();
+        await sendWelcomeEmail(data2.email);
+        loggedInUserEmail = data2.email;
+
+        res.json({
+          status: 200,
+          message: "Login success",
+          token: auth,
+          email: data2.email,
         });
-      }
-  
-      const accountStatus = user.account_status;
-  
-      if (accountStatus === 'active') {
-        const hashedPassword = user.password;
-  
-    
-        const isAdmin = user.is_admin;
-        const query = { is_admin: { $eq: isAdmin } };
-       
-  
-        const isMatch = await bcrypt.compare(password.trim(), hashedPassword);
-  
-        if (isMatch) {
-          // Fetch additional user data if needed
-          const data2 = user.toJSON(); // Convert user object to JSON or extract required fields
-  
-          const auth = jwt.sign({ data: data2 }, SECURITYKEY);
-  
-          user.last_login = new Date();
-          await user.save();
-          await sendWelcomeEmail(data2.email);
-          loggedInUserEmail = data2.email;
-  
-  
-          res.json({
-            status: 200,
-            message: 'Login success',
-            token: auth,
-            email: data2.email,
-          });
-          
-       
-       
-  
-          await auditLog(data2.email, 'login');
-        
-        } else {
-          res.json({
-            status: 400,
-            message: 'Password does not match',
-          });
-        }
+
+        await auditLog(data2.email, "login");
       } else {
         res.json({
           status: 400,
-          message: 'Account is inactive. Please contact the admin department.',
+          message: "Password does not match",
         });
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } else {
       res.json({
-        message: error.message,
+        status: 400,
+        message: "Account is inactive. Please contact the admin department.",
       });
     }
-  };
-  
-
-
-
-  const userSignup = async (req, res) => {
-    let { username, email, password } = req.body;
-  
-    try {
-
-      username = username.toLowerCase();
-      email=email.toLowerCase();
-      // Check if the email already exists
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res.json({
-          status: 400,
-          message: 'User with this email already exists',
-        });
-      }
-  
-      // Check if the username already exists
-      const existingUsername = await User.findOne({
-        username: { $regex: new RegExp(`^${username}$`, 'i') },
-      });
-      if (existingUsername) {
-        return res.json({
-          status: 400,
-          message: 'User with this username already exists',
-        });
-      }
-  
-      // Hash the password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-  
-      // Create a new user
-      const newUser = new User({
-        username,
-        email,
-        password: hashedPassword,
-      });
-  
-      // Save the user to the database
-      await newUser.save();
-  
-      // Send verification mail
-      const mailSubject = 'Mail verification';
-      const randomToken = randomstring.generate();
-      const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://police-portal-back.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
-      await sendDMail(req.body.email, mailSubject, content);
-  
-      // Update user token in the database
-      await User.updateOne({ email: req.body.email }, { token: randomToken });
-
-          // Log signup action to audit log
-    // await auditLog(email, 'signup');
-
-    res.json({
-      status: 200,
-      message: 'A verification mail has been sent to your email id',
-    });
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     res.json({
       message: error.message,
     });
   }
+};
+
+const userSignup = async (req, res) => {
+  let { username, email, password } = req.body;
+
+  try {
+    username = username.toLowerCase();
+    email = email.toLowerCase();
+    // Check if the email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.json({
+        status: 400,
+        message: "User with this email already exists",
+      });
+    }
+
+    // Check if the username already exists
+    const existingUsername = await User.findOne({
+      username: { $regex: new RegExp(`^${username}$`, "i") },
+    });
+    if (existingUsername) {
+      return res.json({
+        status: 400,
+        message: "User with this username already exists",
+      });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create a new user
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    // Save the user to the database
+    await newUser.save();
+
+    // Send verification mail
+    const mailSubject = "Mail verification";
+    const randomToken = randomstring.generate();
+    const content = `<p>Hi ${req.body.username},</p><p>Please click on the link to verify your email:</p><a href="https://police-portal-back.vercel.app/mail-verification?token=${randomToken}">Click here</a>`;
+    await sendDMail(req.body.email, mailSubject, content);
+
+    // Update user token in the database
+    await User.updateOne({ email: req.body.email }, { token: randomToken });
+
+    // Log signup action to audit log
+    // await auditLog(email, 'signup');
+
+    res.json({
+      status: 200,
+      message: "A verification mail has been sent to your email id",
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.json({
+      message: error.message,
+    });
   }
+};
 
-  
-  
+const getLoggedInUserEmail = () => {
+  return loggedInUserEmail;
+};
 
-       const  getLoggedInUserEmail = () => {
-        return loggedInUserEmail;
-      };
+const verifyMail = async (req, res) => {
+  const token = req.query.token;
 
+  try {
+    const user = await User.findOne({ token });
 
-      const verifyMail = async (req, res) => {
-        const token = req.query.token;
-      
-        try {
-          const user = await User.findOne({ token });
-      
-          if (user) {
-            user.token = null;
-            user.is_verified = 1;
-            await user.save();
-      
-            const htmlResponse = `
+    if (user) {
+      user.token = null;
+      user.is_verified = 1;
+      await user.save();
+
+      const htmlResponse = `
               <html>
                 <head>
                   <title>Email Verification</title>
                 </head>
                 <body>
                   <p>Your email has been verified</p>
-                  <a href="https://tnpolice.vercel.app/login">Go to Login</a>
+                  <a href="https://uppolice.vercel.app/login">Go to Login</a>
                 </body>
               </html>
             `;
-      
-            return res.send(htmlResponse);
-          } else {
-            const notFoundResponse = `
+
+      return res.send(htmlResponse);
+    } else {
+      const notFoundResponse = `
               <html>
                 <head>
                   <title>Not Found</title>
@@ -276,33 +252,24 @@ const sendWelcomeEmail = async (email) => {
                 </body>
               </html>
             `;
-      
-            return res.send(notFoundResponse);
-          }
-        } catch (error) {
-          console.log(error.message);
-          // Handle error and return appropriate response
-        }
-      };
-      
 
+      return res.send(notFoundResponse);
+    }
+  } catch (error) {
+    console.log(error.message);
+    // Handle error and return appropriate response
+  }
+};
 
-
-      const usersList = async (req, res) => {
-        try {
-          const users = await User.find();
-          res.json(users);
-        } catch (error) {
-          console.error('Error fetching users:', error);
-          res.status(500).json({ error: 'Internal server error' });
-        }
-      };
-      
-
-
-     
-
-
+const usersList = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 const deleteUser = async (req, res) => {
   const { id } = req.params;
@@ -310,14 +277,14 @@ const deleteUser = async (req, res) => {
   try {
     // Check if id is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid user ID' });
+      return res.status(400).json({ error: "Invalid user ID" });
     }
 
     await User.deleteOne({ _id: id });
-    res.json({ message: 'User deleted successfully' });
+    res.json({ message: "User deleted successfully" });
   } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -328,24 +295,18 @@ const updateUserAccountStatus = async (req, res) => {
   try {
     // Check if id is a valid ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: 'Invalid user ID' });
+      return res.status(400).json({ error: "Invalid user ID" });
     }
 
     await User.updateOne({ _id: id }, { account_status });
-    res.json({ message: 'Account status updated successfully' });
+    res.json({ message: "Account status updated successfully" });
   } catch (error) {
-    console.error('Error updating account status:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error updating account status:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 const forgetPassword = async (req, res) => {
   try {
@@ -353,7 +314,7 @@ const forgetPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      const mailSubject = 'Forget Password';
+      const mailSubject = "Forget Password";
       const randomToken = randomstring.generate();
       const content = `<p>Hi ${user.username}</p><p>Please click on the link to reset your password:</p><a href="https://police-portal-back.vercel.app/forget-Password?token=${randomToken}">Click here</a>`;
       await sendDMail(email, mailSubject, content);
@@ -361,13 +322,20 @@ const forgetPassword = async (req, res) => {
       await PasswordReset.deleteOne({ email });
       await PasswordReset.create({ email, token: randomToken });
 
-      return res.status(200).json({ status: 200, message: 'Reset email has been sent to your email address' });
+      return res
+        .status(200)
+        .json({
+          status: 200,
+          message: "Reset email has been sent to your email address",
+        });
     }
 
-    return res.status(404).json({ status: 404, message: 'Email not found' });
+    return res.status(404).json({ status: 404, message: "Email not found" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ status: 500, message: 'Internal server error' });
+    return res
+      .status(500)
+      .json({ status: 500, message: "Internal server error" });
   }
 };
 
@@ -375,7 +343,7 @@ const resetPassword = async (req, res) => {
   try {
     const token = req.query.token;
     if (token === undefined) {
-      res.status(404).send('404 - Not Found');
+      res.status(404).send("404 - Not Found");
       return;
     }
 
@@ -600,7 +568,7 @@ const resetPassword = async (req, res) => {
       }
     }
 
-    res.status(404).send('404 - Not Found');
+    res.status(404).send("404 - Not Found");
   } catch (error) {
     console.log(error.message);
   }
@@ -608,7 +576,9 @@ const resetPassword = async (req, res) => {
 
 const resetPasswordPost = async (req, res) => {
   try {
-    const updatedTime = new Date().toISOString("en-US", { timeZone: "Asia/Kolkata" });
+    const updatedTime = new Date().toISOString("en-US", {
+      timeZone: "Asia/Kolkata",
+    });
     if (req.body.password !== req.body.confirm_password) {
       // Render the error message directly
       const errorHTML = `
@@ -626,7 +596,6 @@ const resetPasswordPost = async (req, res) => {
       return;
     }
 
-    
     const user = await User.findById(req.body.user_id);
     if (user) {
       bcrypt.hash(req.body.confirm_password, 10, async (err, hash) => {
@@ -648,20 +617,19 @@ const resetPasswordPost = async (req, res) => {
             </head>
             <body>
               <p>Your password has been changed successfully</p>
-              <a href="https://tnpolice.vercel.app/login">Login</a>
+              <a href="https://uppolice.vercel.app/login">Login</a>
             </body>
           </html>
         `;
         res.send(successHTML);
       });
     } else {
-      res.status(404).send('404 - Not Found');
+      res.status(404).send("404 - Not Found");
     }
   } catch (error) {
     console.log(error.message);
   }
 };
-
 
 // Fetch audit logs
 const audit = async (req, res) => {
@@ -670,7 +638,7 @@ const audit = async (req, res) => {
     res.json(auditLogs);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch audit logs' });
+    res.status(500).json({ error: "Failed to fetch audit logs" });
   }
 };
 
@@ -678,22 +646,26 @@ const audit = async (req, res) => {
 const adminpowersaudit = async (req, res) => {
   try {
     const adminAuditLogs = await Adminpowersaudit.find({});
-   
+
     res.json(adminAuditLogs);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch admin powers audit logs' });
+    res.status(500).json({ error: "Failed to fetch admin powers audit logs" });
   }
 };
 
+module.exports = {
+  userLogin,
+  forgetPassword,
+  resetPasswordPost,
+  resetPassword,
 
-
-
-
-      module.exports = { userLogin, forgetPassword,resetPasswordPost,resetPassword,
-        
-        
-        userSignup, getLoggedInUserEmail ,verifyMail,deleteUser,usersList,updateUserAccountStatus
-        ,audit,adminpowersaudit,
-      
-      };
+  userSignup,
+  getLoggedInUserEmail,
+  verifyMail,
+  deleteUser,
+  usersList,
+  updateUserAccountStatus,
+  audit,
+  adminpowersaudit,
+};
